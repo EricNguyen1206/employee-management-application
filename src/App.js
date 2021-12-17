@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ListEmployees from "./components/ListEmployees";
+import UpdateEmployee from "./components/UpdateEmployee";
+import ViewEmployee from "./components/ViewEmployee";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <Header />
+            <div className="container">
+                <BrowserRouter>
+                    <Routes>
+                        <Route
+                            exact
+                            path="/"
+                            element={<ListEmployees />}
+                        ></Route>
+                        <Route
+                            exact
+                            path="/employees"
+                            element={<ListEmployees />}
+                        ></Route>
+                        <Route
+                            exact
+                            path="/update-employee/:id"
+                            element={<UpdateEmployee />}
+                        ></Route>
+                        <Route
+                            exact
+                            path="/view-employee/:id"
+                            element={<ViewEmployee />}
+                        ></Route>
+                    </Routes>
+                </BrowserRouter>
+            </div>
+
+            <Footer />
+        </div>
+    );
 }
 
 export default App;
