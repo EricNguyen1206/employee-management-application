@@ -4,9 +4,15 @@ import EmployeeServices from "../services/EmployeeServices";
 
 function UpdateEmployee() {
     const { id } = useParams();
-    const [firstname, setFirstName] = useState("");
-    const [lastname, setLastName] = useState("");
-    const [emailId, setEmailId] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [gender, setGender] = useState("male");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [birthDay, setBirthDay] = useState("2001-01-01");
+    const [role, setRole] = useState("staff");
+    const [salary, setSalary] = useState(0);
+    const [depart_fk, setDepart_fk] = useState(1);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,9 +21,14 @@ function UpdateEmployee() {
         } else {
             EmployeeServices.getEmployeeById(id).then((res) => {
                 let employee = res.data;
-                setFirstName(employee.firstname);
-                setLastName(employee.lastname);
-                setEmailId(employee.emailId);
+                setFirstName(employee.firstName);
+                setLastName(employee.lastName);
+                setGender(employee.gender);
+                setEmail(employee.email);
+                setPhone(employee.phone);
+                setBirthDay(employee.birthDay);
+                setSalary(employee.salary);
+                setDepart_fk(employee.depart_fk);
             });
         }
     }, [id]);
@@ -30,8 +41,20 @@ function UpdateEmployee() {
         setLastName(e.target.value);
     };
 
-    const handleChangeEmailId = (e) => {
-        setEmailId(e.target.value);
+    const handleChangeEmail = (e) => {
+        setEmail(e.target.value);
+    };
+
+    const handleChangePhone = (e) => {
+        setPhone(e.target.value);
+    };
+
+    const handleChangeBirthDay = (e) => {
+        setBirthDay(e.target.value);
+    };
+
+    const handleChangeSalary = (e) => {
+        setSalary(e.target.value);
     };
 
     const handleCancel = () => {
@@ -39,11 +62,26 @@ function UpdateEmployee() {
     };
 
     const handleUpdateEmployee = () => {
-        const employee = { firstname, lastname, emailId };
+        const employee = {
+            firstName: firstName,
+            lastName: lastName,
+            gender: gender,
+            email: email,
+            phone: phone,
+            birthDay: birthDay,
+            salary: salary,
+        };
         if (id === "_add") {
-            EmployeeServices.createEmployee(employee).then((res) => {
-                navigate("/employees");
-            });
+            EmployeeServices.createEmployee(employee)
+                .then((res) => {
+                    navigate("/employees");
+                })
+                .catch((err) => {
+                    console.log("Failed to create employee", err);
+                })
+                .finally(() => {
+                    console.log(employee);
+                });
         } else {
             EmployeeServices.updateEmployee(employee, id).then((res) => {
                 navigate("/employees");
@@ -53,21 +91,21 @@ function UpdateEmployee() {
 
     return (
         <div className="container">
-            <div className="row">
+            <div className="row" style={{ textAlign: "left" }}>
                 <div className="card col-md-6 offset-md-3 offset-md-3">
-                    <h3 className="text-center">{`${
-                        id === "_add" ? "Add" : "Update"
-                    } Employee`}</h3>
+                    <h3 className="text-center">
+                        {`${id === "_add" ? "Add" : "Update"} Employee`}{" "}
+                    </h3>
                     <div className="card-body"></div>
                     <form>
                         <div className="form-group">
-                            <label>Employee Name</label>
+                            <label>Employee First Name</label>
                             <input
                                 className="form-control"
                                 type="text"
                                 placeholder="First name"
                                 name="firstName"
-                                value={firstname}
+                                value={firstName}
                                 onChange={(e) => handleChangeFirstName(e)}
                             />
                         </div>
@@ -78,9 +116,68 @@ function UpdateEmployee() {
                                 type="text"
                                 placeholder="Last name"
                                 name="lastName"
-                                value={lastname}
+                                value={lastName}
                                 onChange={(e) => handleChangeLastName(e)}
                             />
+                        </div>
+                        <div className="form-group">
+                            <label>Gender</label>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-around",
+                                }}
+                            >
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        value="male"
+                                        onClick={() => setGender("male")}
+                                        name="flexRadioDefault"
+                                        id="flexRadioDefault1"
+                                        defaultChecked
+                                    />
+                                    <label
+                                        className="form-check-label"
+                                        htmlFor="flexRadioDefault1"
+                                    >
+                                        male
+                                    </label>
+                                </div>
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        value="female"
+                                        onClick={() => setGender("female")}
+                                        name="flexRadioDefault"
+                                        id="flexRadioDefault2"
+                                    />
+                                    <label
+                                        className="form-check-label"
+                                        htmlFor="flexRadioDefault2"
+                                    >
+                                        female
+                                    </label>
+                                </div>
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        value="other"
+                                        onClick={() => setGender("other")}
+                                        name="flexRadioDefault"
+                                        id="flexRadioDefault2"
+                                    />
+                                    <label
+                                        className="form-check-label"
+                                        htmlFor="flexRadioDefault2"
+                                    >
+                                        other
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <div className="form-group">
                             <label>Email Address</label>
@@ -89,8 +186,40 @@ function UpdateEmployee() {
                                 type="text"
                                 placeholder="Email"
                                 name="email"
-                                value={emailId}
-                                onChange={(e) => handleChangeEmailId(e)}
+                                value={email}
+                                onChange={(e) => handleChangeEmail(e)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>BirthDay</label>
+                            <input
+                                className="form-control"
+                                type="date"
+                                name="birthDay"
+                                value={birthDay}
+                                onChange={(e) => handleChangeBirthDay(e)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Phone Number</label>
+                            <input
+                                className="form-control"
+                                type="text"
+                                placeholder="Phone number"
+                                name="phone"
+                                value={phone}
+                                onChange={(e) => handleChangePhone(e)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Salary</label>
+                            <input
+                                className="form-control"
+                                type="text"
+                                placeholder="Salary"
+                                name="salary"
+                                value={salary}
+                                onChange={(e) => handleChangeSalary(e)}
                             />
                         </div>
                         <button

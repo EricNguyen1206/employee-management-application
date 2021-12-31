@@ -1,21 +1,36 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EmployeeServices from "../services/EmployeeServices";
 
 function ViewEmployee() {
     const { id } = useParams();
-    const [firstname, setFirstName] = useState("");
-    const [lastname, setLastName] = useState("");
-    const [emailId, setEmailId] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [gender, setGender] = useState("male");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [birthDay, setBirthDay] = useState("2001-01-01");
+    const [role, setRole] = useState("staff");
+    const [salary, setSalary] = useState(0);
+    const [depart_fk, setDepart_fk] = useState(1);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        EmployeeServices.getEmployeeById(id).then((res) => {
-            let employee = res.data;
-            setFirstName(employee.firstname);
-            setLastName(employee.lastname);
-            setEmailId(employee.emailId);
-        });
-    });
+        EmployeeServices.getEmployeeById(id)
+            .then((res) => {
+                let employee = res.data;
+                setFirstName(employee.firstName);
+                setLastName(employee.lastName);
+                setEmail(employee.email);
+                setPhone(employee.phone);
+                setBirthDay(employee.birthDay);
+                setRole(employee.role);
+                setSalary(employee.salary);
+            })
+            .catch(() => {
+                console.log("Can't find employee with id " + id);
+            });
+    }, [id]);
     return (
         <div>
             <div
@@ -25,27 +40,40 @@ function ViewEmployee() {
                 <div className="card-body">
                     <h5 className="card-title">Employee details</h5>
                     <h6 className="card-subtitle mb-2 text-muted">
-                        Name: <span>{firstname + " " + lastname}</span>
+                        Name: <span>{firstName + " " + lastName}</span>
                     </h6>
                     <h6 className="card-subtitle mb-2 text-muted">
                         Employee Id: <span>{id}</span>
                     </h6>
                     <h6 className="card-subtitle mb-2 text-muted">
-                        Email: <span>{emailId}</span>
+                        Email: <span>{email}</span>
                     </h6>
                     <h6 className="card-subtitle mb-2 text-muted">
-                        Office: <span>Unknown</span>
+                        Department: <span>{depart_fk}</span>
                     </h6>
                     <h6 className="card-subtitle mb-2 text-muted">
-                        Role: <span>Unknown</span>
+                        Role: <span>{role}</span>
                     </h6>
-                    <a href="/" className="card-link">
-                        Card link
-                    </a>
-                    <a href="/" className="card-link">
-                        Another link
-                    </a>
+                    <h6 className="card-subtitle mb-2 text-muted">
+                        Salary: <span>{salary}</span>
+                    </h6>
+                    <h6 className="card-subtitle mb-2 text-muted">
+                        Gender: <span>{gender}</span>
+                    </h6>
+                    <h6 className="card-subtitle mb-2 text-muted">
+                        Phone: <span>{phone}</span>
+                    </h6>
+                    <h6 className="card-subtitle mb-2 text-muted">
+                        Birthday: <span>{birthDay}</span>
+                    </h6>
                 </div>
+                <button
+                    type="button"
+                    className="btn btn-outline-danger btn-sm ml-3"
+                    onClick={() => navigate("/employees")}
+                >
+                    Back
+                </button>
             </div>
         </div>
     );

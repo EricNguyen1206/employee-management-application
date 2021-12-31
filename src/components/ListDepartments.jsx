@@ -1,32 +1,30 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import EmployeeServices from "../services/EmployeeServices";
+import DepartServices from "../services/DepartServices";
 
-function ListEmployees() {
-    const [employees, setEmployees] = useState([]);
+function ListDepartments() {
+    const [departments, setDepartments] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        EmployeeServices.getEmployees().then((res) => {
+        DepartServices.getDeparts().then((res) => {
             console.log(res);
-            setEmployees(res.data);
+            setDepartments(res.data);
         });
     }, []);
 
-    const editEmployee = (id) => {
-        console.log("edit");
-        navigate(`/update-employee/${id}`);
+    const editDepartment = (id) => {
+        console.log("edit department", id);
+        navigate(`/update-department/${id}`);
     };
 
-    const deleteEmployee = (id) => {
+    const deleteDepartment = (id) => {
         console.log("delete");
-        EmployeeServices.deleteEmployee(id).then((res) => {
-            setEmployees(employees.filter((employee) => employee.id !== id));
+        DepartServices.deleteDepart(id).then((res) => {
+            setDepartments(
+                departments.filter((department) => department.id !== id)
+            );
         });
-    };
-
-    const viewEmployee = (id) => {
-        navigate(`/view-employee/${id}`);
     };
 
     return (
@@ -35,60 +33,56 @@ function ListEmployees() {
                 style={{ display: "flex", justifyContent: "space-between" }}
                 className="mt-3"
             >
-                <h2 className="text-center">Employees List</h2>
+                <h2 className="text-center">Departments List</h2>
                 <button
                     type="button"
                     className="btn btn-outline-success btn-sm ml-3"
                 >
-                    <a className="nav-link" href="/update-employee/_add">
-                        Add Employee
+                    <a className="nav-link" href="/update-department/_add">
+                        Add Department
                     </a>
                 </button>
             </div>
-            <div className="row mt-3">
+            <div className="row" style={{ width: "70%", margin: "auto" }}>
                 <table className="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
                             <th scope="col">#id</th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">Gender</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Deparment</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Basic Salary</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {employees.map((employee, index) => (
+                        {departments.map((depart, index) => (
                             <tr key={index}>
-                                {console.log(employee)}
-                                <th>{employee.id}</th>
-                                <td>{employee.firstName}</td>
-                                <td>{employee.lastName}</td>
-                                <td>{employee.gender}</td>
-                                <td>{employee.email}</td>
-                                <td>{employee.depart}</td>
+                                {console.log(depart)}
+                                <th>{depart.id}</th>
+                                <td>{depart.name}</td>
+                                <td>{depart.basicSalary}</td>
                                 <td>
                                     <button
-                                        onClick={() =>
-                                            viewEmployee(employee.id)
-                                        }
                                         className="btn btn-info"
+                                        onClick={() =>
+                                            navigate(
+                                                `/view-department/ ${depart.id}`
+                                            )
+                                        }
                                     >
                                         Details
                                     </button>
                                     <button
-                                        onClick={() =>
-                                            editEmployee(employee.id)
-                                        }
                                         className="btn btn-success ml-4"
+                                        onClick={() =>
+                                            editDepartment(depart.id)
+                                        }
                                     >
                                         Update
                                     </button>
                                     <button
                                         className="btn btn-danger ml-4"
                                         onClick={() =>
-                                            deleteEmployee(employee.id)
+                                            deleteDepartment(depart.id)
                                         }
                                     >
                                         Delete
@@ -103,4 +97,4 @@ function ListEmployees() {
     );
 }
 
-export default ListEmployees;
+export default ListDepartments;

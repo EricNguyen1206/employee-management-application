@@ -25,11 +25,18 @@ function Header() {
                             type="button"
                             className="btn btn-outline-success btn-sm ml-3"
                         >
-                            <a
-                                className="nav-link"
-                                href="/update-employee/_add"
-                            >
-                                Add Employee
+                            <a className="nav-link" href="/departments">
+                                Departments
+                            </a>
+                        </button>
+                    </li>
+                    <li className="nav-item">
+                        <button
+                            type="button"
+                            className="btn btn-outline-success btn-sm ml-3"
+                        >
+                            <a className="nav-link" href="/employees">
+                                Employees
                             </a>
                         </button>
                     </li>
