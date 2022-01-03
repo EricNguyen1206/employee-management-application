@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const DEPART_API_BASE_URL = "http://localhost:8070/api/v1/departments";
-
 class DepartServices {
     getDeparts() {
         return axios.get(DEPART_API_BASE_URL);

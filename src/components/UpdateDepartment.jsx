@@ -49,6 +49,71 @@ function UpdateDepartment() {
         navigate("/departments");
     };
 
+    const handleAddEmployee = (employeeId) => {
+        if (employeeId === manager.id) {
+            return;
+        }
+        EmployeeServices.addEmployeeToDepart(id, employeeId).then((res) => {
+            const newStaff = res.data;
+            setEmployees(
+                employees.filter((employee) => employeeId !== employee.id)
+            );
+            console.log("check", res.data.employee);
+            setStaff([...staff, newStaff]);
+        });
+    };
+
+    const handleDeleletStaff = (staffId) => {
+        if (staffId === manager.id) {
+            return;
+        }
+        EmployeeServices.removeEmployeeFromDepart(id, staffId).then((res) => {
+            const newEmployee = res.data;
+            console.log("after delete: " + newEmployee);
+            setEmployees([...employees, newEmployee]);
+            setStaff(staff.filter((s) => s.id !== newEmployee.id));
+        });
+    };
+
+    const handlePromoteStaff = (staffId) => {
+        if (manager) {
+            if (staffId === manager.id) {
+                console.log("staff is already promoted");
+                return;
+            }
+            EmployeeServices.setToStaff(id, manager.id)
+                .then((res) => {
+                    const newStaff = res.data;
+                    setStaff([
+                        ...staff.map((s) =>
+                            s.id === newStaff.id ? newStaff : s
+                        ),
+                    ]);
+                    EmployeeServices.setToManager(id, staffId)
+                        .then((res) => {
+                            const newManager = res.data;
+                            setManager(newManager);
+                        })
+                        .catch((err) => {
+                            console.log("failed to set manager", err);
+                        });
+                })
+                .catch((err) => {
+                    console.log("failed to set staff", err);
+                });
+        } else {
+            EmployeeServices.setToManager(id, staffId).then((res) => {
+                const newManager = res.data;
+                setManager(newManager);
+                setStaff([
+                    ...staff.map((s) =>
+                        s.id === newManager.id ? newManager : s
+                    ),
+                ]);
+            });
+        }
+    };
+
     const handleUpdateDepartment = () => {
         const department = {
             name,
@@ -88,10 +153,9 @@ function UpdateDepartment() {
                     <h3 className="text-center">
                         {`${id === "_add" ? "Add" : "Update"} Department`}
                     </h3>
-                    <div className="card-body"></div>
                     <form>
                         <div className="form-group">
-                            <label>Department:</label>
+                            <label>Department {id}:</label>
                             <input
                                 className="form-control"
                                 type="text"
@@ -111,6 +175,22 @@ function UpdateDepartment() {
                                 value={basicSalary}
                                 onChange={(e) => handleChangeSalary(e)}
                             />
+                        </div>
+                        <div className="d-flex flex-row mb-2">
+                            <div className="mr-4">
+                                Manager:
+                                <span>
+                                    {manager
+                                        ? manager.lastName +
+                                          " " +
+                                          manager.firstName
+                                        : "Null"}
+                                </span>
+                            </div>
+                            <div className="ml-4">
+                                Id:
+                                <span>{manager ? manager.id : "Null"}</span>
+                            </div>
                         </div>
                         <button
                             type="button"
@@ -160,7 +240,7 @@ function UpdateDepartment() {
                                                 className="modal-title"
                                                 id="exampleModalLabel"
                                             >
-                                                Modal title
+                                                Employee free
                                             </h5>
                                             <button
                                                 type="button"
@@ -194,14 +274,13 @@ function UpdateDepartment() {
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-success btn-sm ml-3"
+                                                                onClick={() =>
+                                                                    handleAddEmployee(
+                                                                        employee.id
+                                                                    )
+                                                                }
                                                             >
-                                                                Promote
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-danger btn-sm ml-3"
-                                                            >
-                                                                Delete
+                                                                Add
                                                             </button>
                                                         </div>
                                                     </li>
@@ -216,12 +295,6 @@ function UpdateDepartment() {
                                             >
                                                 Close
                                             </button>
-                                            <button
-                                                type="button"
-                                                className="btn btn-primary"
-                                            >
-                                                Save changes
-                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -229,11 +302,23 @@ function UpdateDepartment() {
                         </div>
                     </div>
                 </div>
-                <ul className="list-group" style={{ alignItems: "center" }}>
+                <ul
+                    className="list-group"
+                    style={{
+                        alignItems: "center",
+                        height: "300px",
+                        width: "538px",
+                        backgroundColor: "#ccc",
+                        borderRadius: "5px",
+                        padding: "5px",
+                        margin: "auto",
+                        overflow: "auto",
+                    }}
+                >
                     {staff.map((employee) => (
                         <li
                             className="list-group-item d-flex flex-row justify-content-between align-items-center"
-                            style={{ width: "50%" }}
+                            style={{ width: "98%" }}
                         >
                             {employee.id +
                                 "|" +
@@ -243,13 +328,31 @@ function UpdateDepartment() {
                             <div>
                                 <button
                                     type="button"
-                                    className="btn btn-success btn-sm ml-3"
+                                    className={`btn ${
+                                        manager
+                                            ? employee.id === manager.id
+                                                ? `btn-secondary`
+                                                : `btn-success`
+                                            : `btn-success`
+                                    } btn-sm ml-3`}
+                                    onClick={() =>
+                                        handlePromoteStaff(employee.id)
+                                    }
                                 >
                                     Promote
                                 </button>
                                 <button
                                     type="button"
-                                    className="btn btn-danger btn-sm ml-3"
+                                    className={`btn ${
+                                        manager
+                                            ? employee.id === manager.id
+                                                ? `btn-secondary`
+                                                : `btn-danger`
+                                            : `btn-danger`
+                                    } btn-sm ml-3`}
+                                    onClick={() =>
+                                        handleDeleletStaff(employee.id)
+                                    }
                                 >
                                     Delete
                                 </button>

@@ -7,7 +7,7 @@ function ViewDepartment() {
     const [name, setName] = useState("");
     const [baseSalary, setBaseSalary] = useState(0);
     const [manager, setManager] = useState("Tuan");
-    const [employees, setEmployees] = useState([]);
+    const [staffs, setStaffs] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,7 +17,7 @@ function ViewDepartment() {
                 let department = res.data;
                 setName(department.name);
                 setBaseSalary("$" + department.basicSalary);
-                setEmployees([...department.employee]);
+                setStaffs([...department.employee]);
                 setManager(
                     department.manager.firstName +
                         " " +
@@ -52,15 +52,42 @@ function ViewDepartment() {
                     <h6 className="card-subtitle mb-2 text-muted">
                         Manager: <span>{manager}</span>
                     </h6>
+
+                    <button
+                        type="button"
+                        className="btn btn-danger btn-sm"
+                        onClick={() => navigate("/departments")}
+                    >
+                        Back
+                    </button>
                 </div>
             </div>
-            <button
-                type="button"
-                className="btn btn-outline-danger btn-sm ml-3"
-                onClick={() => navigate("/departments")}
-            >
-                Back
-            </button>
+            <table className="table table-success table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">#id</th>
+                        <th scope="col">First name</th>
+                        <th scope="col">Last name</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {staffs.map((staff, i) => (
+                        <tr key={i}>
+                            <th scope="row">{staff.id}</th>
+                            <td>{staff.firstName}</td>
+                            <td>{staff.lastName}</td>
+                            <td>{staff.gender}</td>
+                            <td>{staff.phone}</td>
+                            <td>{staff.email}</td>
+                            <td>{staff.salary}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }
