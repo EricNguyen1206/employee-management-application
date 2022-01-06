@@ -8,7 +8,6 @@ function ListDepartments() {
 
     useEffect(() => {
         DepartServices.getDeparts().then((res) => {
-            console.log(res);
             setDepartments(res.data);
         });
     }, []);
@@ -49,23 +48,25 @@ function ListDepartments() {
                         <tr>
                             <th scope="col">#id</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Basic Salary</th>
+                            <th scope="col">Staffs Number</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {departments.map((depart, index) => (
                             <tr key={index}>
-                                {console.log(depart)}
                                 <th>{depart.id}</th>
                                 <td>{depart.name}</td>
-                                <td>{depart.basicSalary}</td>
+                                <td>
+                                    {depart.numberOfEmployees}/
+                                    {depart.maxEmployees}
+                                </td>
                                 <td>
                                     <button
                                         className="btn btn-info"
                                         onClick={() =>
                                             navigate(
-                                                `/view-department/ ${depart.id}`
+                                                `/view-department/${depart.id}`
                                             )
                                         }
                                     >

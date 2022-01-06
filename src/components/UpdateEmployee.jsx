@@ -10,13 +10,23 @@ function UpdateEmployee() {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [birthDay, setBirthDay] = useState("2001-01-01");
-    const [role, setRole] = useState("staff");
+    const [role, setRole] = useState("Staff");
     const [salary, setSalary] = useState(0);
     const [depart_fk, setDepart_fk] = useState(1);
+    const [lastId, setLastId] = useState(1);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (id === "_add") {
+            EmployeeServices.getEmployees().then((res) => {
+                let employees = res.data;
+                let maxId = Math.max.apply(
+                    Math,
+                    employees.map((employee) => employee.id)
+                );
+                console.log("maxId:", maxId);
+                setLastId(maxId);
+            });
             return;
         } else {
             EmployeeServices.getEmployeeById(id).then((res) => {
@@ -63,6 +73,7 @@ function UpdateEmployee() {
 
     const handleUpdateEmployee = () => {
         const employee = {
+            id: lastId + 1,
             firstName: firstName,
             lastName: lastName,
             gender: gender,
@@ -183,7 +194,7 @@ function UpdateEmployee() {
                             <label>Email Address</label>
                             <input
                                 className="form-control"
-                                type="text"
+                                type="email"
                                 placeholder="Email"
                                 name="email"
                                 value={email}
@@ -215,7 +226,7 @@ function UpdateEmployee() {
                             <label>Salary</label>
                             <input
                                 className="form-control"
-                                type="text"
+                                type="number"
                                 placeholder="Salary"
                                 name="salary"
                                 value={salary}

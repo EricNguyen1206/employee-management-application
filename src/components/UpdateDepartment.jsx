@@ -6,7 +6,7 @@ function UpdateDepartment() {
     const { id } = useParams();
     const [name, setName] = useState("");
     const [manager, setManager] = useState({});
-    const [basicSalary, setBasicSalary] = useState(0);
+    const [maxEmployees, setMaxEmployees] = useState(0);
     const [staff, setStaff] = useState([]);
     const [employees, setEmployees] = useState([]);
 
@@ -20,8 +20,8 @@ function UpdateDepartment() {
                 .then((res) => {
                     const department = res.data;
                     setName(department.name);
-                    setBasicSalary(department.basicSalary);
-                    setManager(department.manager);
+                    setMaxEmployees(department.maxEmployees);
+                    setManager(department.manager ? department.manager : {});
                     setStaff(department.employee);
                     console.log(department);
                 })
@@ -42,7 +42,7 @@ function UpdateDepartment() {
     };
 
     const handleChangeSalary = (e) => {
-        setBasicSalary(e.target.value);
+        setMaxEmployees(e.target.value);
     };
 
     const handleCancel = () => {
@@ -50,7 +50,7 @@ function UpdateDepartment() {
     };
 
     const handleAddEmployee = (employeeId) => {
-        if (employeeId === manager.id) {
+        if (manager && employeeId === manager.id) {
             return;
         }
         EmployeeServices.addEmployeeToDepart(id, employeeId).then((res) => {
@@ -76,19 +76,13 @@ function UpdateDepartment() {
     };
 
     const handlePromoteStaff = (staffId) => {
-        if (manager) {
+        if (manager.id) {
             if (staffId === manager.id) {
                 console.log("staff is already promoted");
                 return;
             }
             EmployeeServices.setToStaff(id, manager.id)
                 .then((res) => {
-                    const newStaff = res.data;
-                    setStaff([
-                        ...staff.map((s) =>
-                            s.id === newStaff.id ? newStaff : s
-                        ),
-                    ]);
                     EmployeeServices.setToManager(id, staffId)
                         .then((res) => {
                             const newManager = res.data;
@@ -97,6 +91,12 @@ function UpdateDepartment() {
                         .catch((err) => {
                             console.log("failed to set manager", err);
                         });
+
+                    const newStaff = res.data;
+                    setStaff([
+                        ...staff.filter((s) => s.id !== staffId),
+                        newStaff,
+                    ]);
                 })
                 .catch((err) => {
                     console.log("failed to set staff", err);
@@ -105,11 +105,7 @@ function UpdateDepartment() {
             EmployeeServices.setToManager(id, staffId).then((res) => {
                 const newManager = res.data;
                 setManager(newManager);
-                setStaff([
-                    ...staff.map((s) =>
-                        s.id === newManager.id ? newManager : s
-                    ),
-                ]);
+                setStaff([...staff.filter((s) => s.id !== staffId)]);
             });
         }
     };
@@ -117,7 +113,7 @@ function UpdateDepartment() {
     const handleUpdateDepartment = () => {
         const department = {
             name,
-            basicSalary,
+            maxEmployees,
         };
         if (id === "_add") {
             DepartServices.createDepart(department)
@@ -166,13 +162,13 @@ function UpdateDepartment() {
                             />
                         </div>
                         <div className="form-group">
-                            <label>Base Salary</label>
+                            <label>Max Employees</label>
                             <input
                                 className="form-control"
                                 type="text"
                                 placeholder="Department"
                                 name="name"
-                                value={basicSalary}
+                                value={maxEmployees}
                                 onChange={(e) => handleChangeSalary(e)}
                             />
                         </div>
@@ -249,7 +245,7 @@ function UpdateDepartment() {
                                                 aria-label="Close"
                                             >
                                                 <span aria-hidden="true">
-                                                    ×
+                                                    x
                                                 </span>
                                             </button>
                                         </div>
@@ -264,6 +260,7 @@ function UpdateDepartment() {
                                                         style={{
                                                             width: "100%",
                                                         }}
+                                                        key={employee.id}
                                                     >
                                                         {employee.id +
                                                             " | " +
@@ -315,8 +312,43 @@ function UpdateDepartment() {
                         overflow: "auto",
                     }}
                 >
+                    {manager.id ? (
+                        <li
+                            className="list-group-item d-flex flex-row justify-content-between align-items-center"
+                            style={{ width: "98%" }}
+                        >
+                            {manager.id +
+                                "|" +
+                                manager.firstName +
+                                " " +
+                                manager.lastName}
+                            <div>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary btn-sm ml-3"
+                                    onClick={() =>
+                                        handlePromoteStaff(manager.id)
+                                    }
+                                >
+                                    Promote
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary btn-sm ml-3"
+                                    onClick={() =>
+                                        handleDeleletStaff(manager.id)
+                                    }
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </li>
+                    ) : (
+                        ""
+                    )}
                     {staff.map((employee) => (
                         <li
+                            key={employee.id}
                             className="list-group-item d-flex flex-row justify-content-between align-items-center"
                             style={{ width: "98%" }}
                         >

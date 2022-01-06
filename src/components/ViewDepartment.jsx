@@ -5,24 +5,22 @@ import DepartServices from "../services/DepartServices";
 function ViewDepartment() {
     const { id } = useParams();
     const [name, setName] = useState("");
-    const [baseSalary, setBaseSalary] = useState(0);
-    const [manager, setManager] = useState("Tuan");
+    const [maxEmployees, setMaxEmployees] = useState(1);
+    const [currentEmployees, setCurrentEmployees] = useState(0);
+    const [manager, setManager] = useState({});
     const [staffs, setStaffs] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log("view department:" + id);
         DepartServices.getDepartById(id)
             .then((res) => {
-                console.log(res);
-                let department = res.data;
+                const department = res.data;
                 setName(department.name);
-                setBaseSalary("$" + department.basicSalary);
-                setStaffs([...department.employee]);
-                setManager(
-                    department.manager.firstName +
-                        " " +
-                        department.manager.lastName
-                );
+                setCurrentEmployees(department.numberOfEmployees);
+                setMaxEmployees(department.maxEmployees);
+                setStaffs(department.employee);
+                setManager(department.manager ? department.manager : {});
                 console.log("Load department successfully!");
                 console.log(department);
             })
@@ -30,7 +28,7 @@ function ViewDepartment() {
                 console.log("Can't find department with id " + id);
                 console.error(err);
             });
-    }, []);
+    }, [id]);
 
     return (
         <div>
@@ -47,10 +45,18 @@ function ViewDepartment() {
                         Department Id: <span>{id}</span>
                     </h6>
                     <h6 className="card-subtitle mb-2 text-muted">
-                        Base Salary: <span>{baseSalary}</span>
+                        Max Employees: <span>{maxEmployees}</span>
                     </h6>
                     <h6 className="card-subtitle mb-2 text-muted">
-                        Manager: <span>{manager}</span>
+                        Current Employees: <span>{currentEmployees}</span>
+                    </h6>
+                    <h6 className="card-subtitle mb-2 text-muted">
+                        Manager:{" "}
+                        <span>
+                            {manager.id
+                                ? manager.firstName + " " + manager.lastName
+                                : "Null"}
+                        </span>
                     </h6>
 
                     <button
@@ -75,8 +81,21 @@ function ViewDepartment() {
                     </tr>
                 </thead>
                 <tbody>
-                    {staffs.map((staff, i) => (
-                        <tr key={i}>
+                    {manager.id ? (
+                        <tr>
+                            <th scope="row">{manager.id}</th>
+                            <td>{manager.firstName}</td>
+                            <td>{manager.lastName}</td>
+                            <td>{manager.gender}</td>
+                            <td>{manager.phone}</td>
+                            <td>{manager.email}</td>
+                            <td>{manager.salary}</td>
+                        </tr>
+                    ) : (
+                        ""
+                    )}
+                    {staffs.map((staff) => (
+                        <tr key={staff.id}>
                             <th scope="row">{staff.id}</th>
                             <td>{staff.firstName}</td>
                             <td>{staff.lastName}</td>
