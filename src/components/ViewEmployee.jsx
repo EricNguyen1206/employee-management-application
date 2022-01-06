@@ -12,7 +12,7 @@ function ViewEmployee() {
     const [birthDay, setBirthDay] = useState("2001-01-01");
     const [role, setRole] = useState("staff");
     const [salary, setSalary] = useState(0);
-    const [depart_fk, setDepart_fk] = useState(1);
+    const [depart, setDepart] = useState(1);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,11 +21,13 @@ function ViewEmployee() {
                 let employee = res.data;
                 setFirstName(employee.firstName);
                 setLastName(employee.lastName);
+                setGender(employee.gender);
                 setEmail(employee.email);
                 setPhone(employee.phone);
                 setBirthDay(employee.birthDay);
                 setRole(employee.role);
                 setSalary(employee.salary);
+                setDepart(employee.depart);
             })
             .catch(() => {
                 console.log("Can't find employee with id " + id);
@@ -49,7 +51,7 @@ function ViewEmployee() {
                         Email: <span>{email}</span>
                     </h6>
                     <h6 className="card-subtitle mb-2 text-muted">
-                        Department: <span>{depart_fk}</span>
+                        Department: <span>{depart}</span>
                     </h6>
                     <h6 className="card-subtitle mb-2 text-muted">
                         Role: <span>{role}</span>

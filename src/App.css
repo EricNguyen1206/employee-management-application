@@ -8,9 +8,13 @@
 }
 
 .footer {
-    position: fixed;
-    bottom: 0;
-    left: calc(50% - 100px);
+    clear: both;
+    position: relative;
+    width: 100%;
+}
+
+.footer span {
+    margin: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
