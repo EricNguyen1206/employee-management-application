@@ -20,9 +20,16 @@ function ListEmployees() {
 
     const deleteEmployee = (id) => {
         console.log("delete");
-        EmployeeServices.deleteEmployee(id).then((res) => {
-            setEmployees(employees.filter((employee) => employee.id !== id));
-        });
+        EmployeeServices.deleteEmployee(id)
+            .then((res) => {
+                setEmployees(
+                    employees.filter((employee) => employee.id !== id)
+                );
+            })
+            .catch((res) => {
+                const error = res.response.data.message;
+                alert(error);
+            });
     };
 
     const viewEmployee = (id) => {

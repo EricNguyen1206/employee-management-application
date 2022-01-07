@@ -25,8 +25,10 @@ function UpdateDepartment() {
                     setStaff(department.employee);
                     console.log(department);
                 })
-                .catch((err) => {
+                .catch((res) => {
+                    const err = res.response.data.message;
                     console.log(err);
+                    alert(err);
                 });
 
             EmployeeServices.getEmployees().then((res) => {
@@ -149,7 +151,7 @@ function UpdateDepartment() {
                     <h3 className="text-center">
                         {`${id === "_add" ? "Add" : "Update"} Department`}
                     </h3>
-                    <form>
+                    <form className="mt-3">
                         <div className="form-group">
                             <label>Department {id}:</label>
                             <input

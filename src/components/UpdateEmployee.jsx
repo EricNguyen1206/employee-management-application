@@ -10,9 +10,8 @@ function UpdateEmployee() {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [birthDay, setBirthDay] = useState("2001-01-01");
-    const [role, setRole] = useState("Staff");
     const [salary, setSalary] = useState(0);
-    const [depart_fk, setDepart_fk] = useState(1);
+    const [role, setRole] = useState("Staff");
     const [lastId, setLastId] = useState(1);
     const navigate = useNavigate();
 
@@ -38,7 +37,7 @@ function UpdateEmployee() {
                 setPhone(employee.phone);
                 setBirthDay(employee.birthDay);
                 setSalary(employee.salary);
-                setDepart_fk(employee.depart_fk);
+                setRole(employee.role);
             });
         }
     }, [id]);
@@ -78,6 +77,7 @@ function UpdateEmployee() {
             lastName: lastName,
             gender: gender,
             email: email,
+            role: role,
             phone: phone,
             birthDay: birthDay,
             salary: salary,
@@ -87,8 +87,9 @@ function UpdateEmployee() {
                 .then((res) => {
                     navigate("/employees");
                 })
-                .catch((err) => {
-                    console.log("Failed to create employee", err);
+                .catch((res) => {
+                    const error = res.response.data.message;
+                    alert(error);
                 })
                 .finally(() => {
                     console.log(employee);
