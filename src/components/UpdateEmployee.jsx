@@ -17,15 +17,23 @@ function UpdateEmployee() {
 
     useEffect(() => {
         if (id === "_add") {
-            EmployeeServices.getEmployees().then((res) => {
-                let employees = res.data;
-                let maxId = Math.max.apply(
-                    Math,
-                    employees.map((employee) => employee.id)
-                );
-                console.log("maxId:", maxId);
-                setLastId(maxId);
-            });
+            EmployeeServices.getEmployees()
+                .then((res) => {
+                    let employees = res.data;
+
+                    let maxId = Math.max.apply(
+                        Math,
+                        employees.map((employee) => employee.id)
+                    );
+                    if (maxId < 0) {
+                        maxId = 0;
+                    }
+                    setLastId(maxId);
+                })
+                .catch((res) => {
+                    const err = res.response.data.message;
+                    console.log(err);
+                });
             return;
         } else {
             EmployeeServices.getEmployeeById(id).then((res) => {
@@ -89,15 +97,27 @@ function UpdateEmployee() {
                 })
                 .catch((res) => {
                     const error = res.response.data.message;
+                    console.log(res.response.data.errors);
                     alert(error);
                 })
                 .finally(() => {
                     console.log(employee);
                 });
         } else {
-            EmployeeServices.updateEmployee(employee, id).then((res) => {
-                navigate("/employees");
-            });
+            EmployeeServices.updateEmployee(employee, id)
+                .then((res) => {
+                    navigate("/employees");
+                })
+                .catch((res) => {
+                    const error = res.response.data.message;
+                    console.log(res.response.data);
+                    if (res.response.data.errors) {
+                        let err = res.response.data.errors;
+                        alert(err[0].defaultMessage);
+                    } else {
+                        alert(error);
+                    }
+                });
         }
     };
 

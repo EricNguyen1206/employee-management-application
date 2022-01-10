@@ -123,8 +123,10 @@ function UpdateDepartment() {
                     console.log("Create department successfully");
                     navigate("/departments");
                 })
-                .catch(() => {
-                    console.log("Failed to create department");
+                .catch((res) => {
+                    const err = res.response.data.message;
+                    console.log(err);
+                    alert(err);
                 })
                 .finally(() => {
                     console.log(department);
@@ -135,8 +137,9 @@ function UpdateDepartment() {
                     console.log("Update department successfully");
                     navigate("/departments");
                 })
-                .catch(() => {
-                    console.log("Failed to update department");
+                .catch((res) => {
+                    alert(res.response.data.message);
+                    console.log(res.response.data);
                 })
                 .finally(() => {
                     console.log(department);
@@ -146,7 +149,7 @@ function UpdateDepartment() {
 
     return (
         <div>
-            <div className="row" style={{ textAlign: "left" }}>
+            <div className="row mt-3" style={{ textAlign: "left" }}>
                 <div className="card col-md-6 offset-md-3">
                     <h3 className="text-center">
                         {`${id === "_add" ? "Add" : "Update"} Department`}
