@@ -31,7 +31,7 @@ function ViewDepartment() {
     }, [id]);
 
     return (
-        <div>
+        <div className="mt-3">
             <div
                 className="card"
                 style={{ textAlign: "start", width: "50%", margin: "auto" }}
@@ -68,7 +68,7 @@ function ViewDepartment() {
                     </button>
                 </div>
             </div>
-            <table className="table table-success table-striped mt-3">
+            <table className="table bg-white rounded shadow-sm table-hover mt-3">
                 <thead>
                     <tr>
                         <th scope="col">#id</th>

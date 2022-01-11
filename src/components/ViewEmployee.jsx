@@ -34,7 +34,7 @@ function ViewEmployee() {
             });
     }, [id]);
     return (
-        <div>
+        <div className="mt-3">
             <div
                 className="card"
                 style={{ textAlign: "start", width: "50%", margin: "auto" }}

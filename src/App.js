@@ -6,6 +6,7 @@ import ViewEmployee from "./components/ViewEmployee";
 import ListDepartments from "./components/ListDepartments";
 import UpdateDepartment from "./components/UpdateDepartment";
 import ViewDepartment from "./components/ViewDepartment";
+import ViewDashboard from "./components/ViewDashboard";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 
@@ -19,7 +20,7 @@ function App() {
                         <Route
                             exact
                             path="/"
-                            element={<ListDepartments />}
+                            element={<ViewDashboard />}
                         ></Route>
                         <Route
                             exact

@@ -33,3 +33,14 @@
     -   không trùng tên department khi tạo mới
     -   không được để số employee tối đa bằng 0 khi tạo mới
     -   không cập nhật lại số employee tối đa nhỏ hơn
+
+-   CHI TIẾT CẬP NHẬT NGÀY 11/1/2022
+
+*   Thêm giao diện dashboard cho chương trình
+    -   Thêm file ViewDashboard.jsx
+    -   Thêm CDN fontawesome để dùng các icon cho giao diện (file ./public/index.html)
+*   Thay đổi theme chương trìnha
+    -   Thêm css vào file App.css
+    -   Chỉnh lại màu nền chính
+    -   Thống nhất về giao diện các table (nền trắng, hover)
+    -   Thay đổi button thêm department và thêm employee

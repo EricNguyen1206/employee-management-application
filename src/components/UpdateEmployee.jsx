@@ -96,8 +96,13 @@ function UpdateEmployee() {
                     navigate("/employees");
                 })
                 .catch((res) => {
-                    const error = res.response.data.message;
-                    console.log(res.response.data.errors);
+                    let error = "";
+                    const validateErrors = res.response.data.errors;
+                    if (validateErrors) {
+                        error = validateErrors[0].defaultMessage;
+                    } else {
+                        error = res.response.data.message;
+                    }
                     alert(error);
                 })
                 .finally(() => {

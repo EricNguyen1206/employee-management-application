@@ -1,5 +1,38 @@
+:root {
+    --main-bg-color: #009d63;
+    --main-text-color: #009d63;
+    --second-text-color: #bbbec5;
+    --second-bg-color: #c1efde;
+}
+
+.primary-text {
+    color: var(--main-text-color);
+}
+
+.second-text {
+    color: var(--second-text-color);
+}
+
+.primary-bg {
+    background-color: var(--main-bg-color);
+}
+
+.secondary-bg {
+    background-color: var(--second-bg-color);
+}
+
 .App {
     text-align: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image: linear-gradient(
+        to right,
+        #baf3d7,
+        #c2f5de,
+        #cbf7e4,
+        #d4f8ea,
+        #ddfaef
+    );
 }
 
 .App-logo {
@@ -36,6 +69,10 @@
 
 .App-link {
     color: #61dafb;
+}
+
+.rounded-full {
+    border-radius: 100%;
 }
 
 @keyframes App-logo-spin {

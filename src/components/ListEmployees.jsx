@@ -44,16 +44,14 @@ function ListEmployees() {
             >
                 <h2 className="text-center">Employees List</h2>
                 <button
-                    type="button"
-                    className="btn btn-outline-success btn-sm ml-3"
+                    onClick={() => navigate("/update-employee/_add")}
+                    className="btn"
                 >
-                    <a className="nav-link" href="/update-employee/_add">
-                        Add Employee
-                    </a>
+                    <i class="fas fa-user-plus fs-1 primary-text border rounded-full bg-white p-3"></i>
                 </button>
             </div>
             <div className="row mt-3">
-                <table className="table table-striped table-bordered table-hover">
+                <table className="table bg-white rounded shadow-sm table-hover">
                     <thead>
                         <tr>
                             <th scope="col">#id</th>
