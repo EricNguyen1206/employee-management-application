@@ -1,3 +1,18 @@
+-   CÁCH CÀI ĐẶT PHẦN GIAO DIỆN CHƯƠNG TRÌNH QUẢN LÝ NHÂN SỰ JAVA (SPRING BOOT)
+
+*   Kiểm tra môi trường chạy ứng dụng
+    -   Vào file: C:\Program Files> mở command line tại đây
+    -   Kiểm tra môi trường node với câu lệnh: node -v + Enter
+    -   Kiểm tra trình quản lý node với câu lệnh: npm -v + Enter
+    -   Trong trường hợp báo không tìm thấy từ khóa node, điều đó cho thấy bạn chưa có môi trường node. Để cài đặt hãy vào trang chủ của node https://nodejs.org/en/download/ để download phiên bản phù hợp với máy. Sau đó mở file vừa tải về, nhấn chọn Next > nhấn chọn ô "I accept the terms in the Licence Agrreement" > Next > Next > > Next > Next Finish. Khi này bạn vào lại command line kiểm tra lại với lệnh "node -v" + Enter sẽ thấy phiên bản node được cài đặt
+    -   Trong trường hợp không xem được phiên bản npm. Hãy gõ lệnh: npm install -g npm + Enter để cài đặt trình quản lý node.
+*   Tải và mở source code giao diện:
+    -   Ở trang repository https://github.com/EricNguyen1206/test-employee-management-application , ấn vào nút Code (màu xanh) > Download ZIP để tải về file nén suorce code chương trình.
+    -   Giải nén folder chứa source code ra. Bạn sẽ thấy bên trong có các folder: public, src; file: pakage.json ...
+    -   Lúc này sử dụng một IDE có terminal hoặc mở command line và cd tới folder vừa giải nén.
+    -   Để chương trình chạy được, bạn phải gõ lệnh command npm install npm để cài folder node_modules đúng phiên bản với cấu hình package.json.
+    -   Lúc này mọi thứ gần như đã hoàn thành. Bạn chỉ cần start server java spring boot sau đó mở giao diện lên với lệnh npm start, đợi đến khi trang web được bật trên trình duyệt là thành công. Chúc bạn may mắn!
+
 -   CHI TIẾT CẬP NHẬT NGÀY 16/12/2021
 
 *   Thêm các Components cho view Department, Employee
