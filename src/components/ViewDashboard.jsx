@@ -21,17 +21,10 @@ function ViewDashboard() {
                 )
             );
             setTotalManager(
-                Math.max(
-                    employees.filter((employee) => employee.role === "Manager")
-                        .length
-                )
+                employees.filter((employee) => employee.role === "Manager")
+                    .length
             );
-            setTotalEmployees(
-                Math.max(
-                    employees.filter((employee) => employee.role === "Staff")
-                        .length
-                )
-            );
+            setTotalEmployees(employees.length);
         });
     }, []);
     return (
