@@ -13,6 +13,7 @@ function ViewEmployee() {
     const [role, setRole] = useState("staff");
     const [salary, setSalary] = useState(0);
     const [depart, setDepart] = useState(1);
+    const [promotedDay, setPromotedDay] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -28,6 +29,9 @@ function ViewEmployee() {
                 setRole(employee.role);
                 setSalary(employee.salary);
                 setDepart(employee.depart);
+                if (employee.role === "Manager") {
+                    setPromotedDay(employee.inaugurationDate);
+                }
             })
             .catch(() => {
                 console.log("Can't find employee with id " + id);
@@ -56,6 +60,13 @@ function ViewEmployee() {
                     <h6 className="card-subtitle mb-2 text-muted">
                         Role: <span>{role}</span>
                     </h6>
+                    {promotedDay ? (
+                        <h6 className="card-subtitle mb-2 text-muted">
+                            Promoted Day: <span>{promotedDay}</span>
+                        </h6>
+                    ) : (
+                        ""
+                    )}
                     <h6 className="card-subtitle mb-2 text-muted">
                         Salary: <span>{salary}</span>
                     </h6>
@@ -68,14 +79,14 @@ function ViewEmployee() {
                     <h6 className="card-subtitle mb-2 text-muted">
                         Birthday: <span>{birthDay}</span>
                     </h6>
+                    <button
+                        type="button"
+                        className="btn btn-danger btn-sm"
+                        onClick={() => navigate("/employees")}
+                    >
+                        Back
+                    </button>
                 </div>
-                <button
-                    type="button"
-                    className="btn btn-outline-danger btn-sm ml-3"
-                    onClick={() => navigate("/employees")}
-                >
-                    Back
-                </button>
             </div>
         </div>
     );
